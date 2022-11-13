@@ -66,8 +66,8 @@ def transfer_reports():
         print("Failed to connect to server {}".format(server_creds.get("ip_address")))
     else:
         print("Successfully connected to server {}".format(server_creds.get("ip_address")))
-        command = "sudo rm -rf {}".format(CLI_REPORTS)
-        ssh_execute_command(command,ssh_client) 
+        #command = "sudo rm -rf {}".format(CLI_REPORTS)
+        #ssh_execute_command(command,ssh_client) 
         # create the directory secops_cli in /home/ubuntu
         command = "sudo mkdir {}".format("/home/ubuntu/secops_cli")
         ssh_execute_command(command,ssh_client)
