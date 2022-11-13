@@ -47,7 +47,7 @@ jobs:
       - name: install requirements
         run: pip install -r requirements.txt
       - name: Run pyInstaller
-        run: pyinstaller --onefile Offline_CIDR_Scan.spec
+        run: pyinstaller Offline_CIDR_Scan.py --onefile
       - name: Make binary executable
         run: chmod +x dist/Offline_CIDR_Scan
       - name: make a binary directory
