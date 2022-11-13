@@ -69,11 +69,11 @@ def transfer_reports():
         #command = "sudo rm -rf {}".format(CLI_REPORTS)
         #ssh_execute_command(command,ssh_client) 
         # create the directory secops_cli in /home/ubuntu
-        command = "sudo mkdir {}".format("/home/ubuntu/secops_cli")
-        ssh_execute_command(command,ssh_client)
-        command = "sudo chmod 777 {}".format("/home/ubuntu/secops_cli")
-        ssh_execute_command(command,ssh_client)
-        scp_put_data(ssh_client, "/etc/secops_cli", "/home/ubuntu/secops_cli")
+        # command = "sudo mkdir {}".format("/home/ubuntu/secops_cli")
+        # ssh_execute_command(command,ssh_client)
+        # command = "sudo chmod 777 {}".format("/home/ubuntu/secops_cli")
+        # ssh_execute_command(command,ssh_client)
+        scp_put_data(ssh_client, "/etc/secops_cli", "/home/ubuntu/")
         #scp_put_data(ssh_client, "/etc/secops_cli/server_list", "/home/ubuntu/secops_cli")
         #scp_put_data(ssh_client, "/etc/secops_cli/deleted_servers", "/home/ubuntu/secops_cli")
         # copy the reports from /home/ubuntu/offline_reports to /etc/secops_cli/offline_reports
