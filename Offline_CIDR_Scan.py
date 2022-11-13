@@ -47,7 +47,7 @@ def start_scan(binary_path):
         output, error = cli_process.communicate()
         if error:
             print("Error in scan {}".format(error))
-
+        print(output)
         print("Scan completed on {}".format(ip_address))
     print("Scan Task for remote cli scan completed for user {}".format("Ascent"))
     transfer_reports()
