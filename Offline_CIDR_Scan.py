@@ -77,7 +77,7 @@ def transfer_reports():
         #scp_put_data(ssh_client, "/etc/secops_cli/server_list", "/home/ubuntu/secops_cli")
         #scp_put_data(ssh_client, "/etc/secops_cli/deleted_servers", "/home/ubuntu/secops_cli")
         # copy the reports from /home/ubuntu/offline_reports to /etc/secops_cli/offline_reports
-        command = "sudo cp -r /home/ubuntu/secops_cli /etc/secops_cli"
+        command = "sudo cp -r /home/ubuntu/secops_cli /etc"
         ssh_execute_command(command,ssh_client)
         # delete the reports from /home/ubuntu/offline_reports
         #command = "sudo rm -rf /home/ubuntu/secops_cli"
