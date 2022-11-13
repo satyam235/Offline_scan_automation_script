@@ -80,8 +80,8 @@ def transfer_reports():
         command = "sudo cp -r /home/ubuntu/secops_cli /etc"
         ssh_execute_command(command,ssh_client)
         # delete the reports from /home/ubuntu/offline_reports
-        #command = "sudo rm -rf /home/ubuntu/secops_cli"
-        #ssh_execute_command(command,ssh_client)
+        command = "sudo rm -rf /home/ubuntu/secops_cli"
+        ssh_execute_command(command,ssh_client)
         #close the ssh connection
         ssh_client.close()
         print("Successfully transferred the reports to the jump server")
