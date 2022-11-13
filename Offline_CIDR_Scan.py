@@ -8,7 +8,7 @@ import os
 from scp import SCPClient, SCPException
 import json
 import subprocess
-CLI_REPORTS = "/etc/secops_cli/" 
+CLI_REPORTS = "/etc/secops_cli" 
 directory = "/usr/local/bin/"
 
 def start_scan(binary_path):
@@ -76,8 +76,8 @@ def transfer_reports():
         command = "sudo cp -r /home/ubuntu/secops_cli /etc/secops_cli"
         ssh_execute_command(command,ssh_client)
         # delete the reports from /home/ubuntu/offline_reports
-        command = "sudo rm -rf /home/ubuntu/secops_cli"
-        ssh_execute_command(command,ssh_client)
+        #command = "sudo rm -rf /home/ubuntu/secops_cli"
+        #ssh_execute_command(command,ssh_client)
         #close the ssh connection
         ssh_client.close()
         print("Successfully transferred the reports to the jump server")
