@@ -84,6 +84,9 @@ def transfer_reports():
         ssh_execute_command(command,ssh_client)
         #close the ssh connection
         ssh_client.close()
+        # dlete the reports from /etc/secops_cli/offline_reports locally using subprocess
+        command = "sudo rm -rf /etc/secops_cli"
+        subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print("Successfully transferred the reports to the jump server")
 
 def get_ssh_client(server_creds, timeout=10):
