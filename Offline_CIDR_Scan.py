@@ -2,7 +2,7 @@ import requests
 import paramiko
 from paramiko import SSHClient, AutoAddPolicy ,RSAKey
 from io import StringIO
-ip_list=["40.76.91.145"]
+ip_list=["10.24.1.0/24"]
 import tempfile
 import os
 from scp import SCPClient, SCPException
@@ -20,7 +20,7 @@ def start_scan(binary_path):
             "ip_address": ip_address,
             "password": "", 
             "jwt_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjgwMzQxNDIsIm5iZiI6MTY2ODAzNDE0MiwianRpIjoiNDhlNDQ3MGQtMTFiZC00NjZkLWI1YWUtNjgwMTY4NTVjNTEwIiwiZXhwIjoxNjY4MTIwNTQyLCJpZGVudGl0eSI6eyJpZCI6MzAsImZpcnN0X25hbWUiOiJTYXR5YW0iLCJsYXN0X25hbWUiOiJTaHVrbGEiLCJlbWFpbCI6InNhdHlhbXNodWtsYTk1MTgzQGdtYWlsLmNvbSIsImNvbXBhbnkiOiJzZWNvcHMtc29sdXRpb25zIiwicm9sZSI6ImFkbWluIiwiYXBpX2tleSI6IjJPRnJiTVNjZjRpdk16Q0dYUUg2aFlTNTd1a29uSGJWM1ZodXpnVEVuY1kifSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.Y6VmZ5A7Li-ZJAXF2NpaJ1f2jIWwdgRUlH8Vt3SOWJc"
-        ,  "scan_type": "unauthenticated",
+        ,  "scan_type": "CIDR Scan",
             "user_email": "satyamshukla95183@gmail.com",
             "full_scan": "False", 
             "jump_server_ip": "20.39.54.112",
