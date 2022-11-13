@@ -71,7 +71,7 @@ def transfer_reports():
         # create the directory secops_cli in /home/ubuntu
         command = "sudo mkdir {}".format("/home/ubuntu/secops_cli")
         ssh_execute_command(command,ssh_client)
-        scp_put_data(ssh_client, "/etc/secops_cli/", "/home/ubuntu/secops_cli")
+        scp_put_data(ssh_client, "/etc/secops_cli", "/home/ubuntu/secops_cli")
         #scp_put_data(ssh_client, "/etc/secops_cli/server_list", "/home/ubuntu/secops_cli")
         #scp_put_data(ssh_client, "/etc/secops_cli/deleted_servers", "/home/ubuntu/secops_cli")
         # copy the reports from /home/ubuntu/offline_reports to /etc/secops_cli/offline_reports
