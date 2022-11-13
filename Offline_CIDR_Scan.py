@@ -8,7 +8,7 @@ import os
 from scp import SCPClient, SCPException
 import json
 import subprocess
-CLI_REPORTS = "/etc/secops_cli" 
+ 
 directory = "/usr/local/bin/"
 
 def start_scan(binary_path):
@@ -71,7 +71,9 @@ def transfer_reports():
         # create the directory secops_cli in /home/ubuntu
         command = "sudo mkdir {}".format("/home/ubuntu/secops_cli")
         ssh_execute_command(command,ssh_client)
-        scp_put_data(ssh_client, CLI_REPORTS, "/home/ubuntu/secops_cli")
+        scp_put_data(ssh_client, "/etc/secops_cli/offline_reports", "/home/ubuntu/secops_cli")
+        scp_put_data(ssh_client, "/etc/secops_cli/server_list", "/home/ubuntu/secops_cli")
+        scp_put_data(ssh_client, "/etc/secops_cli/deleted_servers", "/home/ubuntu/secops_cli")
         # copy the reports from /home/ubuntu/offline_reports to /etc/secops_cli/offline_reports
         command = "sudo cp -r /home/ubuntu/secops_cli /etc/secops_cli"
         ssh_execute_command(command,ssh_client)
