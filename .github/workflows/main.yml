@@ -1,0 +1,65 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Ubuntu Build
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+env:
+  BUILD_REQUIRED: True
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This job will build the project
+  build:
+    # The type of runner that the job will run on
+    strategy:
+        matrix:
+            os: [ubuntu-18.04, ubuntu-20.04]
+            python-version: ['3.6','3.8']
+            exclude:
+              - os: ubuntu-18.04
+                python-version: '3.8'
+              - os: ubuntu-20.04
+                python-version: '3.6'
+    runs-on: ${{ matrix.os }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+      - name: Display Python version
+        run: python --version
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: python3 -m venv offline_script_env
+      - name: Activate offline_script_env
+        run: source offline_script_env/bin/activate
+      - name: install requirements
+        run: pip install -r requirements.txt
+      - name: Run pyInstaller
+        run: pyinstaller --onefile Offline_CIDR_Scan.spec
+      - name: Make binary executable
+        run: chmod +x dist/Offline_CIDR_Scan
+      - name: make a binary directory
+        run: mkdir -p bin
+      - name: Copy binary to bin
+        run: cp "dist/Offline_CIDR_Scan" "bin/Offline_CIDR_Scan_${{matrix.os}}"
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ matrix.os }}"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            bin/Offline_CIDR_Scan_${{matrix.os}}
