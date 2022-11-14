@@ -19,9 +19,8 @@ def start_scan(binary_path):
             "operation": "remote_scan",
             "ip_address": ip_address,
             "password": "", 
-            "jwt_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjgwMzQxNDIsIm5iZiI6MTY2ODAzNDE0MiwianRpIjoiNDhlNDQ3MGQtMTFiZC00NjZkLWI1YWUtNjgwMTY4NTVjNTEwIiwiZXhwIjoxNjY4MTIwNTQyLCJpZGVudGl0eSI6eyJpZCI6MzAsImZpcnN0X25hbWUiOiJTYXR5YW0iLCJsYXN0X25hbWUiOiJTaHVrbGEiLCJlbWFpbCI6InNhdHlhbXNodWtsYTk1MTgzQGdtYWlsLmNvbSIsImNvbXBhbnkiOiJzZWNvcHMtc29sdXRpb25zIiwicm9sZSI6ImFkbWluIiwiYXBpX2tleSI6IjJPRnJiTVNjZjRpdk16Q0dYUUg2aFlTNTd1a29uSGJWM1ZodXpnVEVuY1kifSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.Y6VmZ5A7Li-ZJAXF2NpaJ1f2jIWwdgRUlH8Vt3SOWJc"
-        ,  "scan_type": "CIDR Scan",
-            "user_email": "satyamshukla95183@gmail.com",
+            "jwt_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjgwMzQxNDIsIm5iZiI6MTY2ODAzNDE0MiwianRpIjoiNDhlNDQ3MGQtMTFiZC00NjZkLWI1YWUtNjgwMTY4NTVjNTEwIiwiZXhwIjoxNjY4MTIwNTQyLCJpZGVudGl0eSI6eyJpZCI6MzAsImZpcnN0X25hbWUiOiJTYXR5YW0iLCJsYXN0X25hbWUiOiJTaHVrbGEiLCJlbWFpbCI6InNhdHlhbXNodWtsYTk1MTgzQGdtYWlsLmNvbSIsImNvbXBhbnkiOiJzZWNvcHMtc29sdXRpb25zIiwicm9sZSI6ImFkbWluIiwiYXBpX2tleSI6IjJPRnJiTVNjZjRpdk16Q0dYUUg2aFlTNTd1a29uSGJWM1ZodXpnVEVuY1kifSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.Y6VmZ5A7Li-ZJAXF2NpaJ1f2jIWwdgRUlH8Vt3SOWJc",  "scan_type": "CIDR Scan",
+            "user_email": "client_2@gmail.comm",
             "full_scan": "False", 
             "jump_server_ip": "20.39.54.112",
             "additional_args":"-o"
@@ -47,15 +46,14 @@ def start_scan(binary_path):
         output, error = cli_process.communicate()
         if error:
             print("Error in scan {}".format(error))
+            return False
         print(output)
         print("Scan completed on {}".format(ip_address))
     print("Scan Task for remote cli scan completed for user {}".format("Ascent"))
-    transfer_reports()
+    transfer_status = transfer_reports()
+    return transfer_status
 
 def transfer_reports():
-    #create a ssh connection to the jump server
-    #transfer the reports to the jump server
-    #close the ssh connection
     server_creds = {
         "ip_address": "20.39.54.112",
         "username": "ubuntu",
@@ -64,30 +62,19 @@ def transfer_reports():
     ssh_client = get_ssh_client(server_creds, timeout=30)
     if not ssh_client:
         print("Failed to connect to server {}".format(server_creds.get("ip_address")))
+        return False
     else:
         print("Successfully connected to server {}".format(server_creds.get("ip_address")))
-        #command = "sudo rm -rf {}".format(CLI_REPORTS)
-        #ssh_execute_command(command,ssh_client) 
-        # create the directory secops_cli in /home/ubuntu
-        # command = "sudo mkdir {}".format("/home/ubuntu/secops_cli")
-        # ssh_execute_command(command,ssh_client)
-        # command = "sudo chmod 777 {}".format("/home/ubuntu/secops_cli")
-        # ssh_execute_command(command,ssh_client)
         scp_put_data(ssh_client, "/etc/secops_cli", "/home/ubuntu/")
-        #scp_put_data(ssh_client, "/etc/secops_cli/server_list", "/home/ubuntu/secops_cli")
-        #scp_put_data(ssh_client, "/etc/secops_cli/deleted_servers", "/home/ubuntu/secops_cli")
-        # copy the reports from /home/ubuntu/offline_reports to /etc/secops_cli/offline_reports
         command = "sudo cp -r /home/ubuntu/secops_cli /etc"
         ssh_execute_command(command,ssh_client)
-        # delete the reports from /home/ubuntu/offline_reports
         command = "sudo rm -rf /home/ubuntu/secops_cli"
         ssh_execute_command(command,ssh_client)
-        #close the ssh connection
         ssh_client.close()
-        # dlete the reports from /etc/secops_cli/offline_reports locally using subprocess
         command = "sudo rm -rf /etc/secops_cli"
         subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print("Successfully transferred the reports to the jump server")
+        return True
 
 def get_ssh_client(server_creds, timeout=10):
     ssh_client = ssh_connect_private_key(
@@ -97,7 +84,6 @@ def get_ssh_client(server_creds, timeout=10):
         None,
         timeout,
     )
-    print(ssh_client)
     return ssh_client
 
 def ssh_connect_private_key(ip_address, username, ssh_key, passphrase=None, timeout=None):
@@ -199,6 +185,6 @@ def upload_results():
 if __name__ == "__main__":
     binary_path = check_binary()
     if binary_path:
-        start_scan(binary_path)
-    #transfer_reports()
-    upload_results()
+        sucecss = start_scan(binary_path)
+    if sucecss:
+        upload_results()
