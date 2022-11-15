@@ -8,8 +8,15 @@ import os
 from scp import SCPClient, SCPException
 import json
 import subprocess
+from pathlib import Path
  
 directory = "/usr/local/bin/"
+
+
+def get_home_directory():
+    return str(Path.home())
+
+home_dir = get_home_directory() + "/"
 
 def start_scan(binary_path):
     print("Initiating Scan on {} servers".format(len(ip_list)))
@@ -65,10 +72,10 @@ def transfer_reports():
         return False
     else:
         print("Successfully connected to server {}".format(server_creds.get("ip_address")))
-        scp_put_data(ssh_client, "/etc/secops_cli", "/home/ubuntu/")
-        command = "sudo cp -r /home/ubuntu/secops_cli /etc"
+        scp_put_data(ssh_client, "/etc/secops_cli", home_dir)
+        command = "sudo cp -r {}secops_cli /etc".format(home_dir)
         ssh_execute_command(command,ssh_client)
-        command = "sudo rm -rf /home/ubuntu/secops_cli"
+        command = "sudo rm -rf {}secops_cli".format(home_dir)
         ssh_execute_command(command,ssh_client)
         ssh_client.close()
         command = "sudo rm -rf /etc/secops_cli"
@@ -179,6 +186,7 @@ def upload_results():
     else:
         print("upload failed , No info found in response")
         return
+
 
 
 if __name__ == "__main__":
