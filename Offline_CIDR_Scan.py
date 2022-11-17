@@ -75,7 +75,7 @@ def transfer_reports():
         command = "sudo rm -rf {}secops_cli".format(home_dir)
         ssh_execute_command(command,ssh_client)
         ssh_client.close()
-        command = "sudo rm -rf /etc/secops_cli"
+        command = "sudo rm -rf /etc/secops_cli/offline_reports"
         subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print("Successfully transferred the reports to the jump server")
         return True
