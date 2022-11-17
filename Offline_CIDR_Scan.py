@@ -68,6 +68,11 @@ def transfer_reports():
         print("Failed to connect to server {}".format(server_creds.get("ip_address")))
         return False
     else:
+        # get home dir from server
+        stdin,stdout,stderr=ssh_client.exec_command("echo $HOME")
+        stdout.channel.recv_exit_status()
+        home_dir = stdout.read().decode("utf-8").strip()
+        print("Home dir is {}".format(home_dir))
         print("Successfully connected to server {}".format(server_creds.get("ip_address")))
         scp_put_data(ssh_client, "/etc/secops_cli", home_dir)
         command = "sudo cp -r {}secops_cli /etc".format(home_dir)
