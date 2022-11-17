@@ -25,13 +25,10 @@ def start_scan(binary_path):
         cli_command = {
             "operation": "remote_scan",
             "ip_address": ip_address,
-            "password": "", 
-            "jwt_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjgwMzQxNDIsIm5iZiI6MTY2ODAzNDE0MiwianRpIjoiNDhlNDQ3MGQtMTFiZC00NjZkLWI1YWUtNjgwMTY4NTVjNTEwIiwiZXhwIjoxNjY4MTIwNTQyLCJpZGVudGl0eSI6eyJpZCI6MzAsImZpcnN0X25hbWUiOiJTYXR5YW0iLCJsYXN0X25hbWUiOiJTaHVrbGEiLCJlbWFpbCI6InNhdHlhbXNodWtsYTk1MTgzQGdtYWlsLmNvbSIsImNvbXBhbnkiOiJzZWNvcHMtc29sdXRpb25zIiwicm9sZSI6ImFkbWluIiwiYXBpX2tleSI6IjJPRnJiTVNjZjRpdk16Q0dYUUg2aFlTNTd1a29uSGJWM1ZodXpnVEVuY1kifSwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.Y6VmZ5A7Li-ZJAXF2NpaJ1f2jIWwdgRUlH8Vt3SOWJc",  "scan_type": "CIDR Scan",
-            "user_email": "client_2@gmail.com",
+            "scan_type": "CIDR Scan",
             "full_scan": "False", 
             "jump_server_ip": "20.39.54.112",
             "additional_args":"-o"
-        
         }
         argument_dict = {}
         argument_dict[cli_command.get("operation")] = {}
@@ -163,11 +160,18 @@ def upload_results():
         "additional_args":"-u"
 
     }
-    command_url="http://{}:{}/run_task".format("20.168.231.227","5678")
+    command_url="https://{}:{}/run_task".format("20.168.231.227","5678")
     print("Starting upload")
     response = requests.post(command_url, json=cli_command)
     if response.status_code != 200:
-        print("upload failed ")
+            command_url="http://{}:{}/run_task".format("20.168.231.227","5678")
+            print("Sending command to hop server {}".format(command_url))
+            response = requests.post(command_url, json=cli_command)
+            if response.status_code != 200:
+                print("upload failed ")
+                print("Error while sending command to hop server {} -- {}".format(hop_server_ip, response.text))
+                return
+        
     print(response.json().get("Info"))
     # if response jsonhas info check if info is a list if so then check if it has any elements if the stripped elements contains Upload successful
     if response.json().get("Info"):
