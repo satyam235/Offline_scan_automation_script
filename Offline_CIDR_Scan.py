@@ -165,7 +165,8 @@ def upload_results():
         "additional_args":"-u"
 
     }
-    command_url="https://{}:{}/run_task".format("20.168.231.227","5678")
+    command_url="http://{}:{}/run_task".format("20.168.231.227","5678")
+    #command_url="https://{}:{}/run_task".format("20.168.231.227","5678")
     print("Starting upload")
     response = requests.post(command_url, json=cli_command)
     if response.status_code != 200:
