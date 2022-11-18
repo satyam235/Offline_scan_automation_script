@@ -48,7 +48,8 @@ def start_scan(binary_path):
             "scan_type": "CIDR Scan",
             "full_scan": "False", 
             "jump_server_ip": JUMP_SERVER_IP,
-            "additional_args":"-o"
+            "additional_args":"-o",
+            "server_name":SERVER_NAME   
         }
         argument_dict = {}
         argument_dict[cli_command.get("operation")] = {}
@@ -78,8 +79,12 @@ def start_scan(binary_path):
             printer("Scan completed on {}".format(cidr))
     printer("Scan Task for remote cli scan completed for user {}".format("Ascent"))
     print("----------------------------------------")
-    transfer_status = transfer_reports()
-    return transfer_status
+    if args.transfer:
+       transfer_status= transfer_reports()
+    else:
+        printer("Transfer of reports disabled",True)
+    return False
+   
 
 def transfer_reports():
     try:
@@ -282,11 +287,16 @@ def upload_results():
 if __name__ == "__main__":
     global JUMP_SERVER_IP
     global CIDR_LIST
+    global SERVER_NAME
     parser = argparse.ArgumentParser(description='Build the secops cli')
     parser.add_argument('-d','--debug', action='store_true', help='Enable debug mode')
     parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true',default=True)
     parser.add_argument('-cidr', '--cidr_range_list', help='list of target cidr', action='store')
     parser.add_argument('-jp', '--jump_server_ip', help='jump server ip', action='store')
+    parser.add_argument('-sn', '--server_name', help='Name of server.', action='store_true')
+    parser.add_argument('-u', '--upload', help='Upload results to server', action='store_true')
+    parser.add_argument('-t', '--transfer', help='Transfer the reports to the server', action='store_true')
+
     args = parser.parse_args()
 
     if not parser.parse_args().jump_server_ip:
@@ -301,12 +311,22 @@ if __name__ == "__main__":
         parser.error('cidr range is required')
         exit(1)
     else:
-        print(parser.parse_args().cidr_range_list)
         CIDR_LIST = parser.parse_args().cidr_range_list.split(",")
+        if args.debug:
+            printer("CIDR list is {}".format("".join(CIDR_LIST)))
+    if args.server_name:
+        SERVER_NAME = parser.parse_args().server_name.strip()
+        if args.debug:
+            printer("Server name is {}".format(SERVER_NAME))    
+    else:
+        SERVER_NAME = None
 
     sucecss = False
     binary_path = check_binary()
     if binary_path:
         sucecss = start_scan(binary_path)
-    if sucecss:
+    if sucecss and args.upload:
         upload_results()
+    elif not args.upload:
+        printer("Upload is disabled",True)
+        
