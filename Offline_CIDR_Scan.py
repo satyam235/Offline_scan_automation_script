@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore")
+
 import requests
 import paramiko
 from paramiko import SSHClient, AutoAddPolicy ,RSAKey
