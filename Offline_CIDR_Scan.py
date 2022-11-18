@@ -233,7 +233,7 @@ def upload_results():
             "additional_args":"-u"
         }
 
-        command_url="http://{}:{}/run_task".format(JUMP_SERVER_IP,"5678")
+        command_url="https://{}:{}/run_task".format(JUMP_SERVER_IP,"5678")
         
         if debug:
             printer("Command url is {}".format(command_url))
