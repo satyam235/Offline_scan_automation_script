@@ -13,7 +13,7 @@ import subprocess
 from pathlib import Path
 import argparse
 from rich.console import Console
-CIDR_LIST = [{"cidr":"1023.1.0/24","server_name":"Satyam Test"}]
+CIDR_LIST = [{"cidr":"10.23.1.0/24","server_name":"Satyam Test"}]
 console = Console()
 args = None
  
@@ -293,7 +293,7 @@ def upload_results():
 
 if __name__ == "__main__":
     global JUMP_SERVER_IP
-    
+
     parser = argparse.ArgumentParser(description='Build the secops cli')
     parser.add_argument('-d','--debug', action='store_true', help='Enable debug mode')
     parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true',default=True)
