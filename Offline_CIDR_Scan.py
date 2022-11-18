@@ -13,7 +13,7 @@ import subprocess
 from pathlib import Path
 import argparse
 from rich.console import Console
-
+CIDR_LIST = [{"cidr":"1023.1.0/24","server_name":"Satyam Test"}]
 console = Console()
 args = None
  
@@ -47,12 +47,12 @@ def start_scan(binary_path):
             printer("Scanning {}".format(cidr))
         cli_command = {
             "operation": "remote_scan",
-            "ip_address": cidr,
+            "ip_address": cidr.get("cidr"),
             "scan_type": "CIDR Scan",
             "full_scan": "False", 
             "jump_server_ip": JUMP_SERVER_IP,
             "additional_args":"-o",
-            "server_name":SERVER_NAME   
+            "server_name": cidr.get("server_name")   
         }
         argument_dict = {}
         argument_dict[cli_command.get("operation")] = {}
@@ -293,14 +293,11 @@ def upload_results():
 
 if __name__ == "__main__":
     global JUMP_SERVER_IP
-    global CIDR_LIST
-    global SERVER_NAME
+    
     parser = argparse.ArgumentParser(description='Build the secops cli')
     parser.add_argument('-d','--debug', action='store_true', help='Enable debug mode')
     parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true',default=True)
-    parser.add_argument('-cidr', '--cidr_range_list', help='list of target cidr', action='store')
     parser.add_argument('-jp', '--jump_server_ip', help='jump server ip', action='store')
-    parser.add_argument('-sn', '--server_name', help='Name of server.', action='store')
     parser.add_argument('-u', '--upload', help='Upload results to server', action='store_true')
     parser.add_argument('-t', '--transfer', help='Transfer the reports to the server', action='store_true')
 
@@ -313,20 +310,6 @@ if __name__ == "__main__":
         JUMP_SERVER_IP = str(parser.parse_args().jump_server_ip.strip())
         if args.debug:
             printer("Jump server ip is {}".format(JUMP_SERVER_IP))
-            
-    if not parser.parse_args().cidr_range_list:
-        parser.error('cidr range is required')
-        exit(1)
-    else:
-        CIDR_LIST = parser.parse_args().cidr_range_list.split(",")
-        if args.debug:
-            printer("CIDR list is {}".format("".join(CIDR_LIST)))
-    if args.server_name:
-        SERVER_NAME = parser.parse_args().server_name.strip()
-        if args.debug:
-            printer("Server name is {}".format(SERVER_NAME))    
-    else:
-        SERVER_NAME = None
 
     sucess = False
     binary_path = check_binary()
