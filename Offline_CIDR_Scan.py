@@ -2,7 +2,6 @@ import requests
 import paramiko
 from paramiko import SSHClient, AutoAddPolicy ,RSAKey
 from io import StringIO
-ip_list=["10.23.1.0/24"]
 import tempfile
 import os
 from scp import SCPClient, SCPException
@@ -16,12 +15,11 @@ console = Console()
 args = None
  
 directory = "/usr/local/bin/"
-
-
 def get_home_directory():
     return str(Path.home())
 
 home_dir = get_home_directory() + "/"
+
 
 def printer(msg, fail=False):
     if not args:
@@ -40,16 +38,16 @@ def printer(msg, fail=False):
 def start_scan(binary_path):
     verbose = args.verbose
     if verbose:
-        printer("Initiating Scan on {} servers".format(len(ip_list)))
-    for ip_address in ip_list:
+        printer("Total CIDR's to scan {}".format(len(CIDR_LIST)))
+    for cidr in CIDR_LIST:
         if verbose:
-            printer("Scanning {}".format(ip_address))
+            printer("Scanning {}".format(cidr))
         cli_command = {
             "operation": "remote_scan",
-            "ip_address": ip_address,
+            "ip_address": cidr,
             "scan_type": "CIDR Scan",
             "full_scan": "False", 
-            "jump_server_ip": "20.39.54.112",
+            "jump_server_ip": JUMP_SERVER_IP,
             "additional_args":"-o"
         }
         argument_dict = {}
@@ -71,12 +69,13 @@ def start_scan(binary_path):
         cli_process = subprocess.Popen([binary_path, "-cm", argument_dict]+additional_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output, error = cli_process.communicate()
         if error:
-            printer("Error in scan {}".format(error),True)
+            printer("Error in scanning {}".format(cidr),True)
+            printer("Error {}".format(error),True)
             return False
         if args.debug:
             printer("Output of scan {}".format(output))
         if verbose:
-            printer("Scan completed on {}".format(ip_address))
+            printer("Scan completed on {}".format(cidr))
     printer("Scan Task for remote cli scan completed for user {}".format("Ascent"))
     print("----------------------------------------")
     transfer_status = transfer_reports()
@@ -86,13 +85,18 @@ def transfer_reports():
     try:
         verbose = args.verbose
         debug = args.debug
+        
         if verbose:
             printer("Initiating transfer of reports")
         server_creds = {
-            "ip_address": "20.168.231.227",
+            "ip_address": JUMP_SERVER_IP,
             "username": "ubuntu",
             "ssh-file-path": r"daemon_lab_public_machine_key.pem"
         }
+        if debug:
+            printer("Connecting to server")
+            printer("Server creds {}".format(server_creds))
+        
         ssh_client = get_ssh_client(server_creds, timeout=30)
         if not ssh_client:
             printer("Failed to connect to server {}".format(server_creds.get("ip_address")),True)
@@ -157,7 +161,7 @@ def scp_put_data(ssh_client, files, remote_path, recursive=False):
         scp_client.put(files,remote_path,True)
         if debug:
             printer("Successfully transferred files to server")
-        print("Uploaded files %s remotely at path %s",files,remote_path)
+        
     except SCPException as ex:
         if debug:
             printer("Failed to transfer files to server , Exception".format(str(ex)),True)
@@ -221,16 +225,16 @@ def upload_results():
             "acc_password":"Test@1234",
             "acc_api_key":"vx7eLUSnq0ze9B1LuwCfjjTzy2TVfXSCI5IhOPne0fk",
             "additional_args":"-u"
-
         }
-        command_url="http://{}:{}/run_task".format("20.168.231.227","5678")
+
+        command_url="http://{}:{}/run_task".format(JUMP_SERVER_IP,"5678")
         
         if debug:
             printer("Command url is {}".format(command_url))
             printer(("CLI Command is {}".format(cli_command)))
         response = requests.post(command_url, json=cli_command)
         if response.status_code != 200:
-                command_url="http://{}:{}/run_task".format("20.168.231.227","5678")
+                command_url="http://{}:{}/run_task".format(JUMP_SERVER_IP,"5678")
                 if debug:
                     printer("Command url is {}".format(command_url))
                     printer(("CLI Command is {}".format(cli_command)))
@@ -276,11 +280,30 @@ def upload_results():
 
 
 if __name__ == "__main__":
-
+    global JUMP_SERVER_IP
+    global CIDR_LIST
     parser = argparse.ArgumentParser(description='Build the secops cli')
     parser.add_argument('-d','--debug', action='store_true', help='Enable debug mode')
     parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true',default=True)
+    parser.add_argument('-cidr', '--cidr_range_list', help='list of target cidr', action='store')
+    parser.add_argument('-jp', '--jump_server_ip', help='jump server ip', action='store')
     args = parser.parse_args()
+
+    if not parser.parse_args().jump_server_ip:
+        parser.error('jump server ip is required')
+        exit(1)
+    else:
+        JUMP_SERVER_IP = str(parser.parse_args().jump_server_ip.strip())
+        if args.debug:
+            printer("Jump server ip is {}".format(JUMP_SERVER_IP))
+            
+    if not parser.parse_args().cidr_range_list:
+        parser.error('cidr range is required')
+        exit(1)
+    else:
+        print(parser.parse_args().cidr_range_list)
+        CIDR_LIST = parser.parse_args().cidr_range_list.split(",")
+
     sucecss = False
     binary_path = check_binary()
     if binary_path:
