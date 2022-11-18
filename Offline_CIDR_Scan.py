@@ -241,22 +241,25 @@ def upload_results():
         if debug:
             printer("Command url is {}".format(command_url))
             printer(("CLI Command is {}".format(cli_command)))
-        response = requests.post(command_url, json=cli_command,verify=False)
-        if response.status_code != 200:
-                command_url="http://{}:{}/run_task".format(JUMP_SERVER_IP,"5678")
+        try:
+            response = requests.post(command_url, json=cli_command,verify=False)
+        except Exception as e:
+            printer("Error in uploading results {}".format(e),True)
+            command_url="http://{}:{}/run_task".format(JUMP_SERVER_IP,"5678")
+            if debug:
+                printer("Command url is {}".format(command_url))
+                printer(("CLI Command is {}".format(cli_command)))
+            
+            response = requests.post(command_url, json=cli_command)
+            if response.status_code != 200:
                 if debug:
-                    printer("Command url is {}".format(command_url))
-                    printer(("CLI Command is {}".format(cli_command)))
-                
-                response = requests.post(command_url, json=cli_command)
-                if response.status_code != 200:
-                    if debug:
-                        printer("Failed to upload results , {}".format(response.text),True)
-                    return
+                    printer("Failed to upload results , {}".format(response.text),True)
+                return False
+
         if debug:
             printer("Response from server {}".format(response.text))
         
-        # if response jsonhas info check if info is a list if so then check if it has any elements if the stripped elements contains Upload successful
+        # if response json has info check if info is a list if so then check if it has any elements if the stripped elements contains Upload successful
         if response.json().get("Info"):
             if isinstance(response.json().get("Info"), list):
                 if any("Upload successful" in s.strip()  for s in response.json().get("Info")):
@@ -297,7 +300,7 @@ if __name__ == "__main__":
     parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true',default=True)
     parser.add_argument('-cidr', '--cidr_range_list', help='list of target cidr', action='store')
     parser.add_argument('-jp', '--jump_server_ip', help='jump server ip', action='store')
-    parser.add_argument('-sn', '--server_name', help='Name of server.', action='store_true')
+    parser.add_argument('-sn', '--server_name', help='Name of server.', action='store')
     parser.add_argument('-u', '--upload', help='Upload results to server', action='store_true')
     parser.add_argument('-t', '--transfer', help='Transfer the reports to the server', action='store_true')
 
