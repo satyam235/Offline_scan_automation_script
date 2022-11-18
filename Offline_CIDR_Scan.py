@@ -238,7 +238,7 @@ def upload_results():
         if debug:
             printer("Command url is {}".format(command_url))
             printer(("CLI Command is {}".format(cli_command)))
-        response = requests.post(command_url, json=cli_command)
+        response = requests.post(command_url, json=cli_command,verify=False)
         if response.status_code != 200:
                 command_url="http://{}:{}/run_task".format(JUMP_SERVER_IP,"5678")
                 if debug:
