@@ -80,7 +80,7 @@ def start_scan(binary_path):
     printer("Scan Task for remote cli scan completed for user {}".format("Ascent"))
     print("----------------------------------------")
     if args.transfer:
-       transfer_status= transfer_reports()
+       return  transfer_reports()
     else:
         printer("Transfer of reports disabled",True)
     return False
@@ -321,11 +321,11 @@ if __name__ == "__main__":
     else:
         SERVER_NAME = None
 
-    sucecss = False
+    sucess = False
     binary_path = check_binary()
     if binary_path:
-        sucecss = start_scan(binary_path)
-    if sucecss and args.upload:
+        sucess = start_scan(binary_path)
+    if sucess and args.upload:
         upload_results()
     elif not args.upload:
         printer("Upload is disabled",True)
