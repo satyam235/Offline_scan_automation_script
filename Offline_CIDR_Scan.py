@@ -54,7 +54,7 @@ def start_scan(binary_path):
             "additional_args":"-o",
             "server_name": cidr.get("server_name")   
         }
-        if debug:
+        if args.debug:
             printer("CLI command {}".format(cli_command))
         argument_dict = {}
         argument_dict[cli_command.get("operation")] = {}
