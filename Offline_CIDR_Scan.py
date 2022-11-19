@@ -13,7 +13,7 @@ import subprocess
 from pathlib import Path
 import argparse
 from rich.console import Console
-CIDR_LIST = [{"cidr":"10.23.1.0/24","server_name":"Satyam Test"}]
+CIDR_LIST = [{"cidr":"10.24.1.0/24","server_name":"Satyam Test"}]
 console = Console()
 args = None
  
