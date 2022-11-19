@@ -102,7 +102,7 @@ def transfer_reports():
         server_creds = {
             "ip_address": JUMP_SERVER_IP,
             "username": "ubuntu",
-            "ssh-file-path": r"daemon_lab_public_machine_key.pem"
+            "ssh-file-path": SSH_KEY_PATH
         }
         if debug:
             printer("Connecting to server")
@@ -295,6 +295,7 @@ def upload_results():
 
 if __name__ == "__main__":
     global JUMP_SERVER_IP
+    global SSH_KEY_PATH
 
     parser = argparse.ArgumentParser(description='Build the secops cli')
     parser.add_argument('-d','--debug', action='store_true', help='Enable debug mode')
@@ -302,6 +303,8 @@ if __name__ == "__main__":
     parser.add_argument('-jp', '--jump_server_ip', help='jump server ip', action='store')
     parser.add_argument('-u', '--upload', help='Upload results to server', action='store_true')
     parser.add_argument('-t', '--transfer', help='Transfer the reports to the server', action='store_true')
+    # ssh key path
+    parser.add_argument('-k', '--ssh_key', help='ssh key path', action='store')
 
     args = parser.parse_args()
 
@@ -312,7 +315,13 @@ if __name__ == "__main__":
         JUMP_SERVER_IP = str(parser.parse_args().jump_server_ip.strip())
         if args.debug:
             printer("Jump server ip is {}".format(JUMP_SERVER_IP))
-
+    if not parser.parse_args().ssh_key:
+        parser.error('ssh key path is required')
+        exit(1)
+    else:
+        SSH_KEY_PATH = str(parser.parse_args().ssh_key.strip())
+        if args.debug:
+            printer("SSH key path is {}".format(SSH_KEY_PATH))
     sucess = False
     binary_path = check_binary()
     if binary_path:
