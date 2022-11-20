@@ -101,7 +101,7 @@ def transfer_reports():
             printer("Initiating transfer of reports")
         server_creds = {
             "ip_address": JUMP_SERVER_IP,
-            "username": "ubuntu",
+            "username": USERNAME,
             "ssh-file-path": SSH_KEY_PATH
         }
         if debug:
@@ -296,6 +296,7 @@ def upload_results():
 if __name__ == "__main__":
     global JUMP_SERVER_IP
     global SSH_KEY_PATH
+    global USERNAME
 
     parser = argparse.ArgumentParser(description='Build the secops cli')
     parser.add_argument('-d','--debug', action='store_true', help='Enable debug mode')
@@ -305,6 +306,8 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--transfer', help='Transfer the reports to the server', action='store_true')
     # ssh key path
     parser.add_argument('-k', '--ssh_key', help='ssh key path', action='store')
+    # username
+    parser.add_argument('-un', '--username', help='username', action='store')
 
     args = parser.parse_args()
 
@@ -322,6 +325,15 @@ if __name__ == "__main__":
         SSH_KEY_PATH = str(parser.parse_args().ssh_key.strip())
         if args.debug:
             printer("SSH key path is {}".format(SSH_KEY_PATH))
+
+    if not parser.parse_args().username:
+        parser.error('username is required')
+        exit(1)
+    else:
+        USERNAME = str(parser.parse_args().username.strip())
+        if args.debug:
+            printer("Username is    {}".format(USERNAME))
+    
     sucess = False
     binary_path = check_binary()
     if binary_path:
