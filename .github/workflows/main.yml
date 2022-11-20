@@ -47,7 +47,7 @@ jobs:
       - name: install requirements
         run: pip install -r requirements.txt
       - name: Run pyInstaller
-        run: pyinstaller Offline_CIDR_Scan.py --onefile
+        run: pyinstaller Offline_Automation_Script.py --onefile
       - name: Make binary executable
         run: chmod +x dist/Offline_CIDR_Scan
       - name: make a binary directory
@@ -62,4 +62,4 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            bin/Offline_CIDR_Scan_${{matrix.os}}
+            bin/Offline_Automation_Script_${{matrix.os}}
