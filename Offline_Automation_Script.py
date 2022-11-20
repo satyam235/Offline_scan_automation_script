@@ -40,11 +40,11 @@ def printer(msg, fail=False):
 
 def start_scan(binary_path):
     verbose = args.verbose
-    if verbose:
+    if args.debug:
         printer("Total CIDR's to scan {}".format(len(CIDR_LIST)))
     for cidr in CIDR_LIST:
         if verbose:
-            printer("Scanning {}".format(cidr))
+            printer("Performing Assesment on {}".format(cidr.get("cidr")))
         cli_command = {
             "operation": "remote_scan",
             "ip_address": cidr.get("cidr"),
