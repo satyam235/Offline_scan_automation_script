@@ -47,13 +47,13 @@ jobs:
       - name: install requirements
         run: pip install -r requirements.txt
       - name: Run pyInstaller
-        run: pyinstaller Offline_CIDR_Scan.py --onefile
+        run: pyinstaller Offline_Automation_Script.py --onefile
       - name: Make binary executable
-        run: chmod +x dist/Offline_CIDR_Scan
+        run: chmod +x dist/Offline_Automation_Script
       - name: make a binary directory
         run: mkdir -p bin
       - name: Copy binary to bin
-        run: cp "dist/Offline_CIDR_Scan" "bin/Offline_CIDR_Scan_${{matrix.os}}"
+        run: cp "dist/Offline_Automation_Script" "bin/Offline_Automation_Script_${{matrix.os}}"
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
@@ -62,4 +62,4 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            bin/Offline_CIDR_Scan_${{matrix.os}}
+            bin/Offline_Automation_Script_${{matrix.os}}
