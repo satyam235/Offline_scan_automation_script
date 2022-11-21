@@ -13,7 +13,7 @@ import subprocess
 from pathlib import Path
 import argparse
 from rich.console import Console
-CIDR_LIST = [{"cidr":"10.23.1.0/24","server_name":"Satyam Test"}]
+CIDR_LIST = [{"cidr":"10.23.1.0/24","server_name":"Test_Lab"}]
 console = Console()
 args = None
  
@@ -230,9 +230,9 @@ def upload_results():
             printer("Initiating upload of results")
         cli_command = {
             "operation":"upload",
-            "acc_username":"client_2@gmail.com",
+            "acc_username":"lol@lol.com",
             "acc_password":"Test@1234",
-            "acc_api_key":"vx7eLUSnq0ze9B1LuwCfjjTzy2TVfXSCI5IhOPne0fk",
+            "acc_api_key":"awD-t-MWxZmZGFjLpUmccnCbz6qScn51NI81TaIY5is",
             "additional_args":"-u"
         }
 
