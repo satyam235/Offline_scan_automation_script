@@ -84,12 +84,10 @@ def start_scan(binary_path):
             printer("Scan completed on {}".format(cidr))
     printer("Scan Task for remote cli scan completed for user {}".format("Ascent"))
     print("----------------------------------------")
-    if args.transfer:
-       transfer_status = transfer_reports()
-       return transfer_status
-    else:
-        printer("Transfer of reports disabled",True)
-    return False
+    
+    transfer_status = transfer_reports()
+    return transfer_status
+
    
 
 def transfer_reports():
@@ -302,8 +300,6 @@ if __name__ == "__main__":
     parser.add_argument('-d','--debug', action='store_true', help='Enable debug mode')
     parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true',default=True)
     parser.add_argument('-jp', '--jump_server_ip', help='jump server ip', action='store')
-    parser.add_argument('-u', '--upload', help='Upload results to server', action='store_true')
-    parser.add_argument('-t', '--transfer', help='Transfer the reports to the server', action='store_true')
     # ssh key path
     parser.add_argument('-k', '--ssh_key', help='ssh key path', action='store')
     # username
@@ -338,10 +334,8 @@ if __name__ == "__main__":
     binary_path = check_binary()
     if binary_path:
         sucess = start_scan(binary_path)
-    if sucess and args.upload:
+    if sucess :
         upload_results()
-    elif not args.upload:
-        printer("Upload is disabled",True)
     else:
         printer("Upload failed",True)
         
