@@ -13,7 +13,7 @@ import subprocess
 from pathlib import Path
 import argparse
 from rich.console import Console
-CIDR_LIST = [{"cidr":"10.23.1.0/24","server_name":"Test_Lab"}]
+CIDR_LIST = [{"cidr":"10.24.1.0/24","server_name":"Test_Lab"}]
 console = Console()
 args = None
  
@@ -244,7 +244,8 @@ def upload_results():
         try:
             response = requests.post(command_url, json=cli_command,verify=False)
         except Exception as e:
-            printer("Error in uploading results {}".format(e),True)
+            if debug:
+                printer("Error in uploading results {}".format(e),True)
             command_url="http://{}:{}/run_task".format(JUMP_SERVER_IP,"5678")
             if debug:
                 printer("Command url is {}".format(command_url))
