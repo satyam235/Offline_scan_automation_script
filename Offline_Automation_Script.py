@@ -100,13 +100,26 @@ def transfer_reports():
         server_creds = {
             "ip_address": JUMP_SERVER_IP,
             "username": USERNAME,
-            "ssh-file-path": SSH_KEY_PATH
+            "ssh-file-path": SSH_KEY_PATH,
+            "password": PASSWORD
         }
         if debug:
             printer("Connecting to server")
             printer("Server creds {}".format(server_creds))
         
-        ssh_client = get_ssh_client(server_creds, timeout=30)
+        if args.ssh_key:
+            ssh_client = get_ssh_client(server_creds, timeout=30)
+        elif args.password:
+            ssh_client = ssh_connect_password(
+                server_creds["ip_address"],
+                server_creds["username"],
+                server_creds["password"],
+                timeout=30
+            )
+        else:
+            printer("No authentication method provided",True)
+            return False
+
         if not ssh_client:
             printer("Failed to connect to server {}".format(server_creds.get("ip_address")),True)
             return False
@@ -158,6 +171,25 @@ def ssh_connect_private_key(ip_address, username, ssh_key, passphrase=None, time
         client.connect(host, username=username, pkey=pkey)
         return client
         
+    except Exception as ex:
+        if debug:
+            printer("Error in connecting to server {}".format(ex),True)
+        return None
+
+def ssh_connect_password(ip_address, username, password, timeout=None):
+    try:
+        ssh_client = paramiko.SSHClient()
+        ssh_client.set_missing_host_key_policy(AutoAddPolicy())
+        ssh_client.connect(
+            hostname=ip_address,
+            username=username,
+            password=password, 
+            look_for_keys=False,
+            timeout=timeout
+            )
+        
+        app.logger.info("Connected to ssh client using password")
+        return ssh_client
     except Exception as ex:
         if debug:
             printer("Error in connecting to server {}".format(ex),True)
@@ -296,6 +328,7 @@ if __name__ == "__main__":
     global JUMP_SERVER_IP
     global SSH_KEY_PATH
     global USERNAME
+    global PASSWORD
 
     parser = argparse.ArgumentParser(description='Build the secops cli')
     parser.add_argument('-d','--debug', action='store_true', help='Enable debug mode')
@@ -305,6 +338,8 @@ if __name__ == "__main__":
     parser.add_argument('-k', '--ssh_key', help='ssh key path', action='store')
     # username
     parser.add_argument('-un', '--username', help='username', action='store')
+    # password
+    parser.add_argument('-p', '--password', help='password', action='store')
 
     args = parser.parse_args()
 
@@ -315,13 +350,6 @@ if __name__ == "__main__":
         JUMP_SERVER_IP = str(parser.parse_args().jump_server_ip.strip())
         if args.debug:
             printer("Jump server ip is {}".format(JUMP_SERVER_IP))
-    if not parser.parse_args().ssh_key:
-        parser.error('ssh key path is required')
-        exit(1)
-    else:
-        SSH_KEY_PATH = str(parser.parse_args().ssh_key.strip())
-        if args.debug:
-            printer("SSH key path is {}".format(SSH_KEY_PATH))
 
     if not parser.parse_args().username:
         parser.error('username is required')
@@ -330,6 +358,27 @@ if __name__ == "__main__":
         USERNAME = str(parser.parse_args().username.strip())
         if args.debug:
             printer("Username is    {}".format(USERNAME))
+
+
+    if parser.parse_args().ssh_key:
+        SSH_KEY_PATH = str(parser.parse_args().ssh_key.strip())
+        if args.debug:
+            printer("SSH key path is {}".format(SSH_KEY_PATH))
+    else:
+        SSH_KEY_PATH = None
+
+    
+    if  parser.parse_args().password:
+        PASSWORD = str(parser.parse_args().password.strip())
+        if args.debug:
+            printer("Password is {}".format(PASSWORD))
+    else:
+        PASSWORD = None
+
+    # check if ssh and password are not provided
+    if not SSH_KEY_PATH and not PASSWORD:
+        parser.error('Either ssh key or password is required')
+        exit(1)
     
     sucess = False
     binary_path = check_binary()
