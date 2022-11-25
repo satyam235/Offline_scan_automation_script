@@ -13,7 +13,78 @@ import subprocess
 from pathlib import Path
 import argparse
 from rich.console import Console
-CIDR_LIST = [{"cidr":"10.23.1.0/24","server_name":"Test_Lab"}]
+CIDR_LIST = [
+    {
+        "cidr": "10.0.1.0/24", 
+        "server_name": "TESTEXT"
+    },
+    {
+        "cidr": "10.0.0.0/24", 
+        "server_name": "DMZ"
+    },
+    {
+        "cidr": "192.168.9.0/24", 
+        "server_name": "TESTINT"
+    },
+    {
+        "cidr": "192.168.100.0/24", 
+        "server_name": "PROD"
+    },
+    {
+        "cidr": "192.168.14.0/23", 
+        "server_name": "PROD"
+    },
+    {
+        "cidr": "192.168.3.0/24", 
+        "server_name": "PROD"
+    },
+    {
+        "cidr": "192.168.50.0/23", 
+        "server_name": "PROD"
+    },
+    {
+        "cidr": "192.168.5.0/24", 
+        "server_name": "DR site"
+    },
+    {
+        "cidr": "192.168.30.0/24", 
+        "server_name": "Desktop"
+    },
+    {
+        "cidr": "192.168.31.0/24", 
+        "server_name": "Desktop"
+    },
+    {
+        "cidr": "192.168.32.0/24", 
+        "server_name": "Desktop"
+    },
+    {
+        "cidr": "192.168.34.0/23", 
+        "server_name": "Desktop"
+    },
+    {
+        "cidr": "192.168.40.0/24", 
+        "server_name": "Desktop"
+    },
+    {
+        "cidr": "192.168.50.0/23", 
+        "server_name": "Desktop"
+    },
+    {
+        "cidr": "192.168.60.0/22", 
+        "server_name": "Desktop"
+    },
+    {
+        "cidr": "192.168.65.0/24", 
+        "server_name": "Desktop"
+    },
+    {
+        "cidr": "192.168.66.0/24", 
+        "server_name": "Desktop"
+    }
+
+]
+
 console = Console()
 args = None
  
