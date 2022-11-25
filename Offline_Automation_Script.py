@@ -333,9 +333,9 @@ def upload_results():
             printer("Initiating upload of results")
         cli_command = {
             "operation":"upload",
-            "acc_username":"lol@lol.com",
-            "acc_password":"Test@1234",
-            "acc_api_key":"awD-t-MWxZmZGFjLpUmccnCbz6qScn51NI81TaIY5is",
+            "acc_username":"girish@ascent-online.com",
+            "acc_password":"X8JtBPn5wn#S7hnN",
+            "acc_api_key":"fqKrNMmAEltia_59Sh_srhM1mqBqitBMVsAmosBfOo0",
             "additional_args":"-u"
         }
 
