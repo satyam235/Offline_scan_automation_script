@@ -15,7 +15,7 @@ import argparse
 from rich.console import Console
 CIDR_LIST = [
     {
-        "cidr": "10.23.1.0/24", 
+        "cidr": "10.24.1.0/24", 
         "server_name": "TESTEXT"
     }
 ]
