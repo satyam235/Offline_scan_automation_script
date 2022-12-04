@@ -15,7 +15,7 @@ import argparse
 from rich.console import Console
 CIDR_LIST = [
     {
-        "cidr": "10.24.1.0/24", 
+        "cidr": "10.23.1.0/24", 
         "server_name": "TESTEXT"
     }
 ]
@@ -184,6 +184,7 @@ def ssh_connect_private_key(ip_address, username, ssh_key, passphrase=None, time
 
 def ssh_connect_password(ip_address, username, password, timeout=None):
     try:
+        debug = args.debug
         ssh_client = paramiko.SSHClient()
         ssh_client.set_missing_host_key_policy(AutoAddPolicy())
         ssh_client.connect(
