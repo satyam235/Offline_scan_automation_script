@@ -195,7 +195,7 @@ def ssh_connect_password(ip_address, username, password, timeout=None):
             timeout=timeout
             )
         
-        app.logger.info("Connected to ssh client using password")
+        print("Connected to ssh client using password")
         return ssh_client
     except Exception as ex:
         if debug:
