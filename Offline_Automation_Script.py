@@ -91,7 +91,7 @@ def start_scan(binary_path):
         if args.debug:
             printer("Output of scan {}".format(output))
         if verbose:
-            printer("Scan completed on {}".format(cidr))
+            printer("Scan completed on {}".format(cidr.get("cidr")))
     printer("Scan Task for remote cli scan completed for user {}".format("Ascent"))
     print("----------------------------------------")
     
@@ -342,7 +342,7 @@ if __name__ == "__main__":
     global USERNAME
     global PASSWORD
 
-    parser = argparse.ArgumentParser(description='Build the secops cli')
+    parser = argparse.ArgumentParser(description='Automation script for secops cli')
     parser.add_argument('-d','--debug', action='store_true', help='Enable debug mode')
     parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true',default=True)
     parser.add_argument('-jp', '--jump_server_ip', help='jump server ip', action='store')
