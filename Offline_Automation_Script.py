@@ -272,7 +272,7 @@ def upload_results():
             "operation":"upload",
             "acc_username":"lol@lol.com",
             "acc_password":"Test@1234",
-            "acc_api_key":"awD-t-MWxZmZGFjLpUmccnCbz6qScn51NI81TaIY5is",
+            "acc_api_key":"jO1FILKdarDy3Gb0PKgyEb2lq51lNpAfF9GrpAirKe4",
             "additional_args":"-u"
         }
 
