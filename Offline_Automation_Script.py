@@ -15,8 +15,12 @@ import argparse
 from rich.console import Console
 CIDR_LIST = [
     {
-        "cidr": "10.23.1.0/24", 
-        "server_name": "Test Lab 2"
+        "cidr": "10.0.1.0/24", 
+        "server_name": "TESTEXT"
+    },
+    {
+        "cidr": "192.168.9.0/24", 
+        "server_name": "TESTINT"
     }
 ]
 
@@ -270,9 +274,9 @@ def upload_results():
 
         cli_command = {
             "operation":"upload",
-            "acc_username":"lol@lol.com",
-            "acc_password":"Test@1234",
-            "acc_api_key":"jO1FILKdarDy3Gb0PKgyEb2lq51lNpAfF9GrpAirKe4",
+            "acc_username":"girish@ascent-online.com",
+            "acc_password":"X8JtBPn5wn#S7hnN",
+            "acc_api_key":"fqKrNMmAEltia_59Sh_srhM1mqBqitBMVsAmosBfOo0",
             "additional_args":"-u"
         }
 
