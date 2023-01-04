@@ -178,7 +178,7 @@ def ssh_connect_private_key(ip_address, username, ssh_key, passphrase=None, time
         host=ip_address
         username=username
         
-        client.connect(host, username=username, pkey=pkey)
+        client.connect(host, username=username, pkey=pkey, port = 26)
         return client
         
     except Exception as ex:
@@ -240,7 +240,7 @@ def check_binary():
     debug = args.debug
     if os.name == "nt":
         binary_path = directory + os.sep + "secops_cli_windows-latest.exe"
-        # check if binary exists
+        # check if binary exists 
         if not os.path.isfile(binary_path):
             return False
     else:
