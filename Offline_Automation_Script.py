@@ -352,6 +352,8 @@ if __name__ == "__main__":
     parser.add_argument('-un', '--username', help='username', action='store')
     # password
     parser.add_argument('-p', '--password', help='password', action='store')
+    # transfer mode
+    parser.add_argument('-tm', '--transfer_mode', help='transfer mode', action='store')
 
     args = parser.parse_args()
 
@@ -394,6 +396,12 @@ if __name__ == "__main__":
     
     sucess = False
     binary_path = check_binary()
+    # if transfer mode is not provided then check if binary is present in the directory  and transfer it to the jump server
+    if parser.parse_args().transfer_mode:
+        transfer_status = transfer_reports()
+        if transfer_status:
+            upload_results()
+
     if binary_path:
         sucess = start_scan(binary_path)
     if sucess :
