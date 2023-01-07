@@ -66,8 +66,8 @@ def start_scan(binary_path):
             argument_dict[cli_command.get("operation")] = {}
             operation = cli_command.get("operation")
             additional_args = [cli_command.get("additional_args").strip()]
-            acc_username = cli_command.get("user_email")
-            acc_password = cli_command.get("password")
+            acc_username = cli_command.get("acc_username")
+            acc_password = cli_command.get("acc_password")
             jwt_token = cli_command.get("jwt_token")
             acc_api_key = cli_command.get("acc_api_key")
 
