@@ -86,7 +86,8 @@ def start_scan(binary_path):
             
             credential_string = "{},{},{}".format(acc_username, acc_password, acc_api_key)
             argument_dict = json.dumps(argument_dict)
-            
+            if args.debug:
+                printer(binary_path + " -cm " + argument_dict + " -c " + credential_string + " " + " ".join(additional_args))
             cli_process = subprocess.Popen([binary_path, "-cm", argument_dict, "-c", credential_string]+additional_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output, error = cli_process.communicate()
             if error:
