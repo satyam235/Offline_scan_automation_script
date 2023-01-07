@@ -71,7 +71,7 @@ def start_scan(binary_path):
             jwt_token = cli_command.get("jwt_token")
             acc_api_key = cli_command.get("acc_api_key")
 
-            requests_keys = list(cli_command.keys())
+            request_keys = list(cli_command.keys())
 
             if "acc_username" in request_keys:
                 request_keys.remove("acc_username")
