@@ -57,7 +57,8 @@ def start_scan(binary_path):
                     "server_name":"Satyam",
                     "acc_username":"lol@lol.com",
                     "acc_password": "Test@1234",
-                    "acc_api_key": "awD-t-MWxZmZGFjLpUmccnCbz6qScn51NI81TaIY5is"
+                    "acc_api_key": "awD-t-MWxZmZGFjLpUmccnCbz6qScn51NI81TaIY5is",
+                    "additional_args": ""
                     }
             if args.debug:
                 printer("CLI command {}".format(cli_command))
