@@ -12,8 +12,8 @@ from rich.console import Console
 
 CIDR_LIST = [
     {
-        "cidr": "10.23.1.0/24", 
-        "server_name": "lab Setup 1"
+        "cidr": "10.24.1.0/24", 
+        "server_name": "lab Setup 2"
     }
 ]
 
@@ -54,7 +54,7 @@ def start_scan(binary_path):
                     "ip_address":cidr.get("cidr"),
                     "scan_type": "CIDR Scan",
                     "full_scan": "False",
-                    "server_name":"Satyam",
+                    "server_name":"Lab Setup 2",
                     "acc_username":"lol@lol.com",
                     "acc_password": "Test@1234",
                     "acc_api_key": "awD-t-MWxZmZGFjLpUmccnCbz6qScn51NI81TaIY5is",
@@ -148,6 +148,8 @@ if __name__ == "__main__":
         sucess = start_scan(binary_path)
     if sucess :
         printer(msg="Task Completed",fail=False)
+        print("----------------------------------------")
     else:
         printer("Task failed",True)
+        print("----------------------------------------")
         
