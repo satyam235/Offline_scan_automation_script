@@ -12,8 +12,12 @@ from rich.console import Console
 
 CIDR_LIST = [
     {
-        "cidr": "10.24.1.0/24", 
-        "server_name": "lab Setup 2"
+        "cidr": "10.0.1.0/24", 
+        "server_name": "TESTEXT"
+    },
+    {
+        "cidr": "192.168.9.0/24", 
+        "server_name": "TESTINT"
     }
 ]
 
@@ -54,10 +58,10 @@ def start_scan(binary_path):
                     "ip_address":cidr.get("cidr"),
                     "scan_type": "CIDR Scan",
                     "full_scan": "False",
-                    "server_name":"Lab Setup 2",
-                    "acc_username":"lol@lol.com",
-                    "acc_password": "Test@1234",
-                    "acc_api_key": "awD-t-MWxZmZGFjLpUmccnCbz6qScn51NI81TaIY5is",
+                    "server_name":cidr.get("server_name"),
+                    "acc_username":"girish@ascent-online.com",
+                    "acc_password": "X8JtBPn5wn#S7hnN",
+                    "acc_api_key": "fqKrNMmAEltia_59Sh_srhM1mqBqitBMVsAmosBfOo0",
                     "additional_args": ""
                     }
             if args.debug:
